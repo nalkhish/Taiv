@@ -54,11 +54,6 @@ function TutorialGuide ({
     }
   }, []);
 
-  const setAndPositionStep = useCallback((el: HTMLElement | null, tipProps: TipPropsType | null) => {
-    setCurrentStep({el, tipProps: tipProps});
-    positionHole(el);
-  }, [positionHole]);
-
   /** Look for the next step that hasn't had an overlay
    * Resets on refreshing page
    * subscribed with a mutation observer because the question can change without retrigerring effect
@@ -71,7 +66,7 @@ function TutorialGuide ({
           const stepInfo = remainingSteps[idx];
           const el = document.getElementById(stepInfo.elementId);
           if (el) {
-            setAndPositionStep(el, stepInfo.tipProps);
+            setCurrentStep({el, tipProps: stepInfo.tipProps});
             setRemainingSteps((cur) => cur.filter((step) => step.elementId !== stepInfo.elementId));
             break;
           }
@@ -88,7 +83,7 @@ function TutorialGuide ({
     return () => {
       if (observer && observer.disconnect) { observer.disconnect() }
     }
-  }, [tutorialRef, remainingSteps, currentStep, setAndPositionStep])
+  }, [tutorialRef, remainingSteps, currentStep])
 
   /** reposition overlay hole when dom changes - for example: class change after animation */
   useEffect(() => {
@@ -100,14 +95,14 @@ function TutorialGuide ({
     return () => {
       if (observer && observer.disconnect) { observer.disconnect() }
     }
-  }, [tutorialRef, currentStep, positionHole]);
+  }, [currentStep, positionHole, tutorialRef]);
 
   /** reposition overlay hole when scrolling or changing window size */
   const windowSize = useWindowSize();
   const WindowScrollYPosition = useWindowScrollYPosition();
   useEffect(() => {
     positionHole(currentStep.el);
-  }, [currentStep, windowSize.height, windowSize.width, WindowScrollYPosition, positionHole]);
+  }, [currentStep, positionHole, windowSize.height, windowSize.width, WindowScrollYPosition]);
 
   if (!currentStep.el) {
     return null
@@ -117,8 +112,8 @@ function TutorialGuide ({
     <Modal>
       <div
         className="position-fixed fill-container tutorial-guide"
-        onClick={() => setAndPositionStep(null, null)}
-        onKeyDown={(e) => e.key === 'Enter' ? setAndPositionStep(null, null) : null}
+        onClick={() => setCurrentStep({el: null, tipProps: null})}
+        onKeyDown={(e) => e.key === 'Enter' ? setCurrentStep({el: null, tipProps: null}) : null}
         tabIndex={0}
         role="button"
         aria-label="Overlay hiding interface"
