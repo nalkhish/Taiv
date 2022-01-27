@@ -1,0 +1,7 @@
+.tutorial-guide > * {
+    box-shadow: 0 0 0 1000vh var(--transparent);
+}
+
+.tutorial-guide:focus > * {
+    box-shadow: 0 0 0 1000vh var(--transparent-focus);
+}
