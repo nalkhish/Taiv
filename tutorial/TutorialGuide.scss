@@ -1,3 +1,7 @@
+.tutorial-guide {
+    z-index: 1000;
+}
+
 .tutorial-guide > * {
     box-shadow: 0 0 0 1000vh var(--transparent);
 }

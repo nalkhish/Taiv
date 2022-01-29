@@ -16,7 +16,7 @@ export interface TutorialGuidePropsType {
    * Used to force rechecking for appearance of elements. 
    */
   tutorialRef: React.RefObject<HTMLDivElement>,
-  /** The steps that are highlight in this tutorial */
+  /** The steps that are highlighted in this tutorial */
   highlightedSteps: StepsInfoType
 }
 
@@ -56,7 +56,7 @@ function TutorialGuide ({
 
   /** Look for the next step that hasn't had an overlay
    * Resets on refreshing page
-   * subscribed with a mutation observer because the question can change without retrigerring effect
+   * subscribed with a mutation observer because the UI can change without retrigerring effect
    */
   useEffect(() => {
     /** Only advances when current step is null (previous overlay has to have been dismissed) */
